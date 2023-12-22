@@ -77,7 +77,7 @@ cuda环境变量配置
 复制到对应文件夹  
 `sudo cp -r /lib/* /usr/local/cuda-11.8/lib64/`  
 `sudo cp -r /include/* /usr/local/cuda-11.8/include/`  
-更改读取权限   
+更改读取权限  
 `sudo chmod a+r /usr/local/cuda-11.8/include/cudnn*`  
 `sudo chmod a+r /usr/local/cuda-11.8/lib64/libcudnn*`  
 检查cudnn是否安装成功  

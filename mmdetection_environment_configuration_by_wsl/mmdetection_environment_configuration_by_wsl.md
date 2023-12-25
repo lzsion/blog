@@ -1,8 +1,8 @@
-# 使用WSL配置mmdetection环境
+# 使用WSL配置mmdetection环境  
 
-Editor : LZS
+Editor : LZS  
 
-## 1 Ubuntu环境配置(WSL)
+## 1 Ubuntu环境配置(WSL)  
 
 参考连接  
 [配置wsl2-Ubuntu视频](https://www.bilibili.com/video/BV1o8411C7wm/)  
@@ -27,8 +27,10 @@ wsl更新到wsl2[官方教程](https://learn.microsoft.com/zh-cn/windows/wsl/ins
 设置wsl2为默认版本(以管理员打开powershell)  
 `wsl --set-default-version 2`  
 
-**step5**  
+**step5 (optional)**  
 wsl迁移  
+wsl默认路径是C盘 可以迁移到其他地方  
+即先备份到一个位置 再加载到另一个位置  
 以管理员运行powershell  
 关闭wsl  
 `wsl --shutdown`  
@@ -38,7 +40,7 @@ wsl迁移
 `wsl --unregister Ubuntu-20.04`  
 导入wsl  
 `wsl --import Ubuntu-20.04 D:/ubuntu/ubuntu2004 D:/ubuntu/ubuntu2004.tarr --version 2`  
-修改默认用户名  
+修改默认加载的用户名  
 `ubuntu2004 config --default-user lzs`  
 
 ### 1.2 安装cuda环境  
@@ -141,6 +143,7 @@ ubuntu终端输入 `wget <下载链接>` 例如
 使用vscode打开  
 到 `mmdet` 路径下  
 `code mmdetection`  
+或者在vscode中打开 左下角打开远程窗口 连接到wsl  
 
 ### 2.2 训练VOC数据集  
 
@@ -164,15 +167,34 @@ ubuntu终端输入 `wget <下载链接>` 例如
 **step4**  
 改数据集加载  
 `mmdetection/configs/base/datasets/voc0712.py`  
-中的  
+中修改  
 `data_root = 'data/SAR-AIRcraft-1.0/'`  
 `ann_file='ImageSets/Main/train.txt',`  
 `data_prefix=dict(sub_data_root=''),`  
 
-**step5**  
+**step5 (optional)**  
+修改epoch数以及优化器  
+`mmdetection/configs/pascal_voc/faster-rcnn_r50_fpn_1x_voc0712.py`  
+
+**step6 (optional)**  
+修改模型(nms, anchor)  
+`mmdetection/configs/_base_/models/faster-rcnn_r50_fpn.py`  
+
+**step7**  
 开始训练  
 先进入克隆的 `mmdetection` 文件夹  
 重新初始化  
 `python setup.py install`  
 训练  
 `python tools/train.py configs/pascal_voc/faster-rcnn_r50_fpn_1x_voc0712.py`  
+
+### 2.3 可视化  
+
+**绘制曲线** `loss_rpn_cls`  
+`python tools/analysis_tools/analyze_logs.py plot_curve work_dirs/faster-rcnn_r50_fpn_1x_voc0712/20231222_133834/vis_data/20231222_133834.json --key loss_rpn_cls`  
+
+**显示测试集上的标注图片**  
+`python tools/test.py work_dirs/faster-rcnn_r50_fpn_1x_voc0712/20231222_133834/vis_data/config.py work_dirs/faster-rcnn_r50_fpn_1x_voc0712/epoch_6.pth --show`  
+
+**仅显示测试集上的mAP**  
+`python tools/test.py work_dirs/faster-rcnn_r50_fpn_1x_voc0712/config.py work_dirs/faster-rcnn_r50_fpn_1x_voc0712/epoch_4.pth`  

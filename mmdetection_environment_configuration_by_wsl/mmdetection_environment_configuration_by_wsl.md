@@ -204,9 +204,9 @@ ubuntu终端输入 `wget <下载链接>` 例如
 ## 3 mmrotate配置  
 
 参考连接  
-[mmrotate官方教程](https://mmrotate.readthedocs.io/zh-cn/latest/install.html#id2)
-[mmrotate dev-1.x安装教程 博客1](https://www.cnblogs.com/lzqdeboke/p/17335742.html)
-[mmrotate dev-1.x安装教程 博客2](https://blog.csdn.net/qq_41627642/article/details/128713683)
+[mmrotate官方教程](https://mmrotate.readthedocs.io/zh-cn/latest/install.html#id2)  
+[mmrotate dev-1.x安装教程 博客1](https://www.cnblogs.com/lzqdeboke/p/17335742.html)  
+[mmrotate dev-1.x安装教程 博客2](https://blog.csdn.net/qq_41627642/article/details/128713683)  
 
 ### 3.1 配置mmrotate
 

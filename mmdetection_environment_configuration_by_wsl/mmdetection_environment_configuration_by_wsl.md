@@ -289,7 +289,7 @@ ubuntu终端输入 `wget <下载链接>` 例如
 下载配置文件和模型权重文件  
 `mim download mmrotate --config rotated_rtmdet_s-3x-dota --dest .`  
 运行demo程序  
-`python demo/image_demo.py demo/demo.jpg rotated_rtmdet_s-3x-dota.py rotated_rtmdet_s-3x-dota-11f6ccf5.pth --out-file result.jpg`
+`python demo/image_demo.py demo/demo.jpg rotated_rtmdet_s-3x-dota.py rotated_rtmdet_s-3x-dota-11f6ccf5.pth --out-file result.jpg`  
 成功后当前文件夹中会有新的图像 `result.jpg`  
 
 *另一种验证安装方法*  

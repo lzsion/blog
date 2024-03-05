@@ -39,7 +39,7 @@ wsl默认路径是C盘 可以迁移到其他地方
 卸载原有的Linux  
 `wsl --unregister Ubuntu-20.04`  
 导入wsl  
-`wsl --import Ubuntu-20.04 D:/ubuntu/ubuntu2004 D:/ubuntu/ubuntu2004.tarr --version 2`  
+`wsl --import Ubuntu-20.04 D:/ubuntu/ubuntu2004 D:/ubuntu/ubuntu2004.tar --version 2`  
 修改默认加载的用户名  
 `ubuntu2004 config --default-user lzs`  
 
@@ -116,7 +116,7 @@ ubuntu终端输入 `wget <下载链接>` 例如
 ### 2.1 安装mmdetection  
 
 **step1**  
-使用 MIM 安装 MMEngine 和 MMCV  
+使用 mim 安装 mmengine 和 mmcv  
 进入conda的mmdet环境  
 `pip install -U openmim`  
 `mim install mmengine`  
@@ -128,7 +128,9 @@ ubuntu终端输入 `wget <下载链接>` 例如
 `cd mmdet/`  
 克隆仓库  
 `git clone https://github.com/open-mmlab/mmdetection.git`  
+进入目录  
 `cd mmdetection`  
+安装依赖  
 `pip install -v -e .`  
 
 **step3**  
@@ -198,3 +200,118 @@ ubuntu终端输入 `wget <下载链接>` 例如
 
 **仅显示测试集上的mAP**  
 `python tools/test.py work_dirs/faster-rcnn_r50_fpn_1x_voc0712/config.py work_dirs/faster-rcnn_r50_fpn_1x_voc0712/epoch_4.pth`  
+
+## 3 mmrotate配置  
+
+参考连接  
+[mmrotate官方教程](https://mmrotate.readthedocs.io/zh-cn/latest/install.html#id2)
+[mmrotate dev-1.x安装教程 博客1](https://www.cnblogs.com/lzqdeboke/p/17335742.html)
+[mmrotate dev-1.x安装教程 博客2](https://blog.csdn.net/qq_41627642/article/details/128713683)
+
+### 3.1 配置mmrotate
+
+**step1**  
+配置pytorch  
+`conda create --name mmrotate python=3.8`  
+`conda activate mmrotate`  
+[pytorch官网](https://pytorch.org/get-started/previous-versions/)  
+选择对应pytorch版本下载  
+
+**step2**  
+使用 mim 安装 mmengine 和 mmcv  
+进入conda的mmrotate环境  
+`pip install -U openmim`
+`mim install mmcv-full`
+`mim install mmdet\<3.0.0`
+克隆仓库  
+`git clone https://github.com/open-mmlab/mmrotate.git`  
+进入目录  
+`cd mmdetection`  
+安装依赖  
+`pip install -v -e .`  
+
+**step3**  
+验证安装  
+下载配置文件和模型权重文件  
+`mim download mmrotate --config oriented_rcnn_r50_fpn_1x_dota_le90 --dest .`  
+运行demo程序  
+`python demo/image_demo.py demo/demo.jpg oriented_rcnn_r50_fpn_1x_dota_le90.py oriented_rcnn_r50_fpn_1x_dota_le90-6d2b2ce0.pth --out-file result.jpg`  
+成功后当前文件夹中会有新的图像 `result.jpg`  
+
+### 3.2 配置mmrotate dev-1.x  
+
+**step1**  
+配置pytorch  
+`conda create --name mmrotate_1 python=3.8`  
+`conda activate mmrotate_1`  
+[pytorch官网](https://pytorch.org/get-started/previous-versions/)  
+选择对应pytorch版本下载  
+可以克隆mmrotate的环境
+`conda create --name mmrotate --clone mmrotate`
+
+**step2**  
+官方教程不适用于 mmrotate dev-1.x 的配置
+配置mmrotate dev-1.x 的时候 一些mmlab的模块可能不兼容
+以下是兼容的版本  
+|  Package   |  Version   |
+|  :----:    |  :----:    |
+|  mmcls     |  1.0.0rc6  |
+|  mmcv      |  2.0.1     |
+|  mmdet     |  3.0.0     |
+|  mmengine  |  0.10.3    |
+|  mmrotate  |  1.0.0rc1  |
+
+![mmlab模块版本](https://github.com/lzsion/image-hosting/blob/master/blog/Snipaste_2024-03-05_17-31-52.png?raw=true)
+
+使用 mim 安装 mmengine 和 mmcv  
+进入conda的mmrotate环境  
+`pip install -U openmim`  
+`mim install mmengine==0.10.3`  
+`mim install "mmcv==2.0.1"`  
+`mim install "mmcls==1.0.0rc6"`  
+`mim install "mmdet==3.0.0"`  
+克隆仓库  
+`git clone -b dev-1.x https://github.com/open-mmlab/mmrotate.git`  
+进入目录  
+`cd mmdetection`  
+安装依赖  
+`pip install -r requirements.txt`  
+`pip install -v -e .`  
+检查mmlab模块版本  
+`mim list`  
+
+**注:**  
+如果有低版本的 mmcv-full 需要删除  
+`mim uninstall mmcv-full`
+
+**step3**  
+验证安装  
+下载配置文件和模型权重文件  
+`mim download mmrotate --config rotated_rtmdet_s-3x-dota --dest .`  
+运行demo程序  
+`python demo/image_demo.py demo/demo.jpg rotated_rtmdet_s-3x-dota.py rotated_rtmdet_s-3x-dota-11f6ccf5.pth --out-file result.jpg`
+成功后当前文件夹中会有新的图像 `result.jpg`  
+
+*另一种验证安装方法*  
+进入python 输入
+
+```python
+import argparse
+import logging
+import os
+import os.path as osp
+
+from mmdet.utils import register_all_modules as register_all_modules_mmdet
+from mmcls.utils import register_all_modules as register_all_modules_mmcls
+from mmengine.config import Config, DictAction
+from mmengine.logging import print_log
+from mmengine.registry import RUNNERS
+from mmengine.runner import Runner
+from mmrotate.utils import register_all_modules
+
+register_all_modules_mmcls()
+register_all_modules_mmdet()
+register_all_modules()
+```
+
+没有报错即安装成功
